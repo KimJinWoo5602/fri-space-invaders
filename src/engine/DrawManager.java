@@ -511,6 +511,7 @@ public final class DrawManager {
 	//mainmenu 1014
 	public void drawSettingMenu(final Screen screen, final int option) {
 		String VolumeString = "Sound";
+		String resetString = "Reset";
 		String BackString = "Back";
 
 		if (option == 8)
@@ -519,12 +520,19 @@ public final class DrawManager {
 			backBufferGraphics.setColor(Color.WHITE);
 		drawCenteredRegularString(screen, VolumeString,
 				screen.getHeight()/3);
+		if (option == 9)
+			backBufferGraphics.setColor(Color.GREEN);
+		else
+			backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, resetString,
+				screen.getHeight()/3 + fontRegularMetrics.getHeight() * 2);
+			
 		if (option == 1)
 			backBufferGraphics.setColor(Color.GREEN);
 		else
 			backBufferGraphics.setColor(Color.WHITE);
 		drawCenteredRegularString(screen, BackString, screen.getHeight()/3
-				 + fontRegularMetrics.getHeight() * 2);
+				 + fontRegularMetrics.getHeight() * 4);
 		
 	}
 

@@ -1,5 +1,6 @@
 package engine;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -309,6 +310,10 @@ public final class Core {
 						+ " setting screen at " + FPS + " fps.");
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing help screen.");
+				break;
+			case 9: //reset
+				returnCode = frame.setScreen(currentScreen);
+				
 				break;
 
 			}
