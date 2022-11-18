@@ -3,6 +3,7 @@ package engine;
 
 import java.awt.Color;
 
+
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.FontMetrics;
@@ -25,6 +26,9 @@ import sound.SoundPlay;
 import javax.swing.*;
 import java.awt.Graphics;
 import java.awt.Image;
+
+import java.io.*;
+import java.time.*;
 
 /**
  * Manages screen drawing.
@@ -199,6 +203,7 @@ public final class DrawManager {
 		// drawGrid(screen);
 	}
 	public void initDrawing(final Screen screen) {
+
 		backBuffer = new BufferedImage(screen.getWidth(), screen.getHeight(),
 				BufferedImage.TYPE_INT_RGB);
 
@@ -225,9 +230,21 @@ public final class DrawManager {
 	}
 	public void bottomAD(Graphics g, Screen screen) {
 		
+		int k = (int)(System.currentTimeMillis() /1000 % 4) + 1;
 		
 		Image AD1 = new ImageIcon("res/AD/AD1.jpg").getImage();
-		g.drawImage(AD1,0,screen.getHeight()-77,null);
+		Image AD2 = new ImageIcon("res/AD/AD2.jpg").getImage();
+		Image AD3 = new ImageIcon("res/AD/AD3.jpg").getImage();
+		Image AD4 = new ImageIcon("res/AD/AD4.jpg").getImage();
+		
+		if(k==1)
+			g.drawImage(AD1,0,screen.getHeight()-77,null);
+		else if(k==2)
+			g.drawImage(AD2,0,screen.getHeight()-77,null);
+		else if(k==3)
+			g.drawImage(AD3,0,screen.getHeight()-77,null);		
+		else
+			g.drawImage(AD4,0,screen.getHeight()-77,null);
 		
 		
 	}
