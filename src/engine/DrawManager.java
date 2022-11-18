@@ -176,6 +176,28 @@ public final class DrawManager {
 	 * @param screen
 	 *            Screen to draw in.
 	 */
+	public void initDrawingNoAD(final Screen screen) {
+		backBuffer = new BufferedImage(screen.getWidth(), screen.getHeight(),
+				BufferedImage.TYPE_INT_RGB);
+
+		graphics = frame.getGraphics();
+		backBufferGraphics = backBuffer.getGraphics();
+
+		if (GameScreen.lives <= 3 && GameScreen.lives > 0) {
+			backBufferGraphics.setColor(colors[GameScreen.lives - 1]);
+		} else {
+			backBufferGraphics.setColor(Color.BLACK);
+		}
+
+		backBufferGraphics
+				.fillRect(0, 0, screen.getWidth(), screen.getHeight());
+
+		fontRegularMetrics = backBufferGraphics.getFontMetrics(fontRegular);
+		fontBigMetrics = backBufferGraphics.getFontMetrics(fontBig);
+		
+		// drawBorders(screen);
+		// drawGrid(screen);
+	}
 	public void initDrawing(final Screen screen) {
 		backBuffer = new BufferedImage(screen.getWidth(), screen.getHeight(),
 				BufferedImage.TYPE_INT_RGB);

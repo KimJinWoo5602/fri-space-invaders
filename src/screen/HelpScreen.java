@@ -71,7 +71,7 @@ public class HelpScreen extends Screen {
 	 * Draws the elements associated with the screen.
 	 */
 	private void draw() {
-		drawManager.initDrawing(this);
+		drawManager.initDrawingNoAD(this);
 
 		drawManager.drawHelpMenu(this, page_num);
 

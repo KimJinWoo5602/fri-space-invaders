@@ -326,7 +326,7 @@ public class GameScreen extends Screen {
 	 * Draws the elements associated with the screen.
 	 */
 	private void draw() {
-		drawManager.initDrawing(this);
+		drawManager.initDrawingNoAD(this);
 		for(Item item : this.itemiterator) {
 			if (item != null) {
 				drawManager.drawEntity(item, item.getPositionX(),
