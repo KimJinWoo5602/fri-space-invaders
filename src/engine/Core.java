@@ -312,6 +312,8 @@ public final class Core {
 				LOGGER.info("Closing help screen.");
 				break;
 			case 9: //reset
+	            File file = new File("save");
+	            file.delete();
 				returnCode = frame.setScreen(currentScreen);
 				
 				break;
