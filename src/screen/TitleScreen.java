@@ -117,7 +117,6 @@ public class TitleScreen extends Screen {
 
 		drawManager.drawTitle(this);
 		drawManager.drawMenu(this, this.returnCode);
-
 		drawManager.completeDrawing(this);
 	}
 }

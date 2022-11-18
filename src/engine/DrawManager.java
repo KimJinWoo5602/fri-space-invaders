@@ -2,6 +2,7 @@
 package engine;
 
 import java.awt.Color;
+
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.FontMetrics;
@@ -13,12 +14,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+
 import screen.GameScreen;
 import screen.Screen;
 import entity.Entity;
 import entity.Ship;
 import entity.Life;
 import sound.SoundPlay;
+
+import javax.swing.*;
+import java.awt.Graphics;
+import java.awt.Image;
 
 /**
  * Manages screen drawing.
@@ -188,9 +194,20 @@ public final class DrawManager {
 
 		fontRegularMetrics = backBufferGraphics.getFontMetrics(fontRegular);
 		fontBigMetrics = backBufferGraphics.getFontMetrics(fontBig);
-
+		backBufferGraphics.setColor(Color.white);
+		backBufferGraphics.fillRect(0, screen.getHeight()-77, screen.getWidth(), screen.getHeight());
+		
+		bottomAD(backBufferGraphics,screen);
 		// drawBorders(screen);
 		// drawGrid(screen);
+	}
+	public void bottomAD(Graphics g, Screen screen) {
+		
+		
+		Image AD1 = new ImageIcon("res/AD/AD1.jpg").getImage();
+		g.drawImage(AD1,0,screen.getHeight()-77,null);
+		
+		
 	}
 
 	/**
@@ -386,6 +403,7 @@ public final class DrawManager {
 		backBufferGraphics.setColor(Color.GREEN);
 		drawCenteredBigString(screen, titleString, screen.getHeight() / 6);
 	}
+	
 
 	/**
 	 * Draws main menu.
@@ -449,6 +467,8 @@ public final class DrawManager {
 				 3 + fontRegularMetrics.getHeight() * 12);
 		
 	}
+	
+
 	//mainmenu 1014
 	public void drawSettingMenu(final Screen screen, final int option) {
 		String VolumeString = "Sound";
