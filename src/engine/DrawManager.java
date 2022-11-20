@@ -511,6 +511,7 @@ public final class DrawManager {
 	//mainmenu 1014
 	public void drawSettingMenu(final Screen screen, final int option) {
 		String VolumeString = "Sound";
+		String KeyString = "Key Setting";
 		String resetString = "Reset";
 		String BackString = "Back";
 
@@ -520,19 +521,27 @@ public final class DrawManager {
 			backBufferGraphics.setColor(Color.WHITE);
 		drawCenteredRegularString(screen, VolumeString,
 				screen.getHeight()/3);
+		
+		if (option == 10)
+			backBufferGraphics.setColor(Color.GREEN);
+		else
+			backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, KeyString,
+				screen.getHeight()/3 + fontRegularMetrics.getHeight() * 2);
+		
 		if (option == 9)
 			backBufferGraphics.setColor(Color.GREEN);
 		else
 			backBufferGraphics.setColor(Color.WHITE);
 		drawCenteredRegularString(screen, resetString,
-				screen.getHeight()/3 + fontRegularMetrics.getHeight() * 2);
-			
+				screen.getHeight()/3 + fontRegularMetrics.getHeight() * 4);
+		
 		if (option == 1)
 			backBufferGraphics.setColor(Color.GREEN);
 		else
 			backBufferGraphics.setColor(Color.WHITE);
 		drawCenteredRegularString(screen, BackString, screen.getHeight()/3
-				 + fontRegularMetrics.getHeight() * 4);
+				 + fontRegularMetrics.getHeight() * 6);
 		
 	}
 
@@ -579,6 +588,36 @@ public final class DrawManager {
 		}
 
 	}
+	
+	public void drawGameKeyMenu(final Screen screen, final int option) {
+		String volumeString = "Key Type";
+		String backString = "Back";
+		
+		if (option == -1)
+			backBufferGraphics.setColor(Color.GREEN);
+		else
+			backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, volumeString,
+				screen.getHeight()/3);
+		drawCenteredBigString(screen, Integer.toString(Core.getKeyIndex() + 1),screen.getHeight()/3+fontRegularMetrics.getHeight() * 2);
+		
+		if (option == 6)
+			backBufferGraphics.setColor(Color.GREEN);
+		else
+			backBufferGraphics.setColor(Color.WHITE);
+		drawCenteredRegularString(screen, backString,
+				screen.getHeight()/3 + fontBigMetrics.getHeight() * 7);
+		
+		backBufferGraphics.setColor(Color.WHITE);
+		if (Core.getKeyIndex() == 0) drawCenteredRegularString(screen, "Right A   Left D   Shoot Space",
+				screen.getHeight()/3 + fontRegularMetrics.getHeight() * 4);
+		else if (Core.getKeyIndex() == 1) drawCenteredRegularString(screen, "Right A   Left D   Shoot Enter",
+				screen.getHeight()/3 + fontRegularMetrics.getHeight() * 4);
+		else if (Core.getKeyIndex() == 2) drawCenteredRegularString(screen, "Right <-   Left ->   Shoot Space",
+				screen.getHeight()/3 + fontRegularMetrics.getHeight() * 4);
+		else if (Core.getKeyIndex() == 3) drawCenteredRegularString(screen, "Right <-   Left ->   Shoot Enter",
+				screen.getHeight()/3 + fontRegularMetrics.getHeight() * 4);
+	}
 
 	/**
 	 * Draws game results.
@@ -620,6 +659,8 @@ public final class DrawManager {
 		drawCenteredRegularString(screen, accuracyString, screen.getHeight()
 				/ height + fontRegularMetrics.getHeight() * 6);
 	}
+	
+	
 
 	/**
 	 * Draws interactive characters for name input.

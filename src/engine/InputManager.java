@@ -17,7 +17,7 @@ public final class InputManager implements KeyListener {
 	private static boolean[] keys;
 	/** Singleton instance of the class. */
 	private static InputManager instance;
-
+	
 	/**
 	 * Private constructor.
 	 */
@@ -70,7 +70,7 @@ public final class InputManager implements KeyListener {
 		if (key.getKeyCode() >= 0 && key.getKeyCode() < NUM_KEYS)
 			keys[key.getKeyCode()] = false;
 	}
-
+	
 	/**
 	 * Does nothing.
 	 * 

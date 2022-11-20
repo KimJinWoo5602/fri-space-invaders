@@ -23,6 +23,7 @@ import screen.HelpScreen;
 import screen.VolumeScreen;
 import screen.StoreScreen;
 import screen.PauseScreen;
+import screen.GameKeyScreen;
 
 /**
  * Implements core game logic.
@@ -81,7 +82,20 @@ public final class Core {
 	/** Difficulty settings list. */
 	private static List<GameSettings> gameSettings;
 	/** Key settings data of GameScreen */
-	private static GameKeySettings gameKeySettings = new GameKeySettings(KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
+	
+	private static int currentKeySettingIndex = 0;
+	
+	private static GameKeySettings gameKeySettings_1 = new GameKeySettings(KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
+	
+	private static GameKeySettings gameKeySettings_2 = new GameKeySettings(KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_ENTER);
+	
+	private static GameKeySettings gameKeySettings_3 = new GameKeySettings(KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_SPACE);
+	
+	private static GameKeySettings gameKeySettings_4 = new GameKeySettings(KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_ENTER);
+	
+	private static List<GameKeySettings> gameKeySettings;
+	
+	
 	/** Application logger. */
 	private static final Logger LOGGER = Logger.getLogger(Core.class
 			.getSimpleName());
@@ -130,6 +144,12 @@ public final class Core {
 		gameSettings.add(SETTINGS_LEVEL_6);
 		gameSettings.add(SETTINGS_LEVEL_7);
 		gameSettings.add(SETTINGS_Boss_Stage);
+		
+		gameKeySettings = new ArrayList<GameKeySettings>();
+		gameKeySettings.add(gameKeySettings_1);
+		gameKeySettings.add(gameKeySettings_2);
+		gameKeySettings.add(gameKeySettings_3);
+		gameKeySettings.add(gameKeySettings_4);
 
 		GameState gameState;
 		PermanentState permanentState = PermanentState.getInstance();
@@ -156,8 +176,9 @@ public final class Core {
 								% EXTRA_LIFE_FRECUENCY == 0
 								&& gameState.getLivesRemaining() < MAX_LIVES;
 						currentScreen = new GameScreen(gameState,
-								gameSettings.get(gameState.getLevel() - 1), gameKeySettings,
+								gameSettings.get(gameState.getLevel() - 1), gameKeySettings.get(currentKeySettingIndex),
 								bonusLife, width, height, FPS);
+						
 						LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 								+ " game screen at " + FPS + " fps.");
 						frame.setScreen(currentScreen);
@@ -314,11 +335,19 @@ public final class Core {
 				returnCode = frame.setScreen(currentScreen);
 				LOGGER.info("Closing help screen.");
 				break;
+				
 			case 9: //reset
 	            File file = new File("save");
 	            file.delete();
 				returnCode = frame.setScreen(currentScreen);
+				break;
 				
+			case 10: //GameKeySetting
+				currentScreen = new GameKeyScreen(width, height, FPS);
+				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
+						+ " setting screen at " + FPS + " fps.");
+				returnCode = frame.setScreen(currentScreen);
+				LOGGER.info("Closing help screen.");
 				break;
 
 			}
@@ -336,11 +365,17 @@ public final class Core {
 	private Core() {
 
 	}
-
-
-	public static GameKeySettings getGameKeySettings() {
-		return gameKeySettings;
+	
+	public static void setKeyIndex(final int keyindex) {
+		if (keyindex >= 0 && keyindex < 4) {
+			currentKeySettingIndex = keyindex;
+		}
 	}
+	
+	public static int getKeyIndex() {
+		return currentKeySettingIndex;
+	}
+	
 	/**
 	 * Controls access to the logger.
 	 *
