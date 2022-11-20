@@ -13,7 +13,7 @@ import sound.SoundType;
  * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
  * 
  */
-public class SettingScreen extends Screen {
+public class GameKeyScreen extends Screen {
 
 	/** Milliseconds between changes in user selection. */
 	private static final int SELECTION_TIME = 200;
@@ -32,11 +32,14 @@ public class SettingScreen extends Screen {
 	 * @param fps
 	 *            Frames per second, frame rate at which the game is run.
 	 */
-	public SettingScreen(final int width, final int height, final int fps) {
+	
+	private int Keyindex;
+	
+	public GameKeyScreen(final int width, final int height, final int fps) {
 		super(width, height, fps);
 
 		// Defaults to play.
-		this.returnCode = 8;
+		this.returnCode = -1;
 		this.selectionCooldown = Core.getCooldown(SELECTION_TIME);
 		this.selectionCooldown.reset();
 	}
@@ -71,9 +74,39 @@ public class SettingScreen extends Screen {
 				nextMenuItem();
 				this.selectionCooldown.reset();
 			}
-			if (inputManager.isKeyDown(KeyEvent.VK_SPACE)) {
-				this.isRunning = false;
+			
+			if (inputManager.isKeyDown(KeyEvent.VK_RIGHT)
+					|| inputManager.isKeyDown(KeyEvent.VK_D)) {
+				soundPlay.play(SoundType.menuSelect);
+				
+				if (returnCode == -1) {
+					Keyindex = Core.getKeyIndex();
+					Keyindex++;
+					if (Keyindex > 3) Keyindex = 0;
+					else if (Keyindex < 0) Keyindex = 3;
+					Core.setKeyIndex(Keyindex);
+				}
+				
+				this.selectionCooldown.reset();
+			}
+			if (inputManager.isKeyDown(KeyEvent.VK_LEFT)
+					|| inputManager.isKeyDown(KeyEvent.VK_A)) {
+				soundPlay.play(SoundType.menuSelect);
+				
+				if (returnCode == -1) {
+					Keyindex = Core.getKeyIndex();
+					Keyindex--;
+					if (Keyindex > 3) Keyindex = 0;
+					else if (Keyindex < 0) Keyindex = 3;
+					Core.setKeyIndex(Keyindex);
+				}
+				
+				this.selectionCooldown.reset();
+			}
+			
+			if (inputManager.isKeyDown(KeyEvent.VK_SPACE) && returnCode == 6) {
 				soundPlay.play(SoundType.menuClick);
+				this.isRunning = false;
 			}
 		}
 	}
@@ -82,14 +115,10 @@ public class SettingScreen extends Screen {
 	 * Shifts the focus to the next menu item.
 	 */
 	private void nextMenuItem() {
-		if (this.returnCode == 9)
-			this.returnCode = 1;
-		else if(this.returnCode == 1)
-			this.returnCode = 8;
-		else if(this.returnCode == 8)
-			this.returnCode = 10;
-		else if(this.returnCode == 10)
-			this.returnCode = 9;
+		if (this.returnCode == -1)
+			this.returnCode = 6;
+		else if(this.returnCode == 6)
+			this.returnCode = -1;
 		else
 			this.returnCode++;
 		soundPlay.play(SoundType.menuSelect);
@@ -99,14 +128,10 @@ public class SettingScreen extends Screen {
 	 * Shifts the focus to the previous menu item.
 	 */
 	private void previousMenuItem() {
-		if (this.returnCode == 8)
-			this.returnCode = 1;
-		else if(this.returnCode == 1)
-			this.returnCode = 9;
-		else if(this.returnCode == 9)
-			this.returnCode = 10;
-		else if(this.returnCode == 10)
-			this.returnCode = 8;
+		if (this.returnCode == -1)
+			this.returnCode = 6;
+		else if (this.returnCode == 6)
+			this.returnCode = -1;
 		else
 			this.returnCode--;
 		soundPlay.play(SoundType.menuSelect);
@@ -117,9 +142,9 @@ public class SettingScreen extends Screen {
 	 */
 	private void draw() {
 		drawManager.initDrawing(this);
-
-		drawManager.drawSetting(this);
-		drawManager.drawSettingMenu(this, this.returnCode);
+		
+		drawManager.drawTitle(this);
+		drawManager.drawGameKeyMenu(this, this.returnCode);
 
 		drawManager.completeDrawing(this);
 	}
