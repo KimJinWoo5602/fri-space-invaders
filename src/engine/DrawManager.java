@@ -100,6 +100,8 @@ public final class DrawManager {
 		ItemGet,
 		/** shield for playership */
 		Shield,
+		ExtraLife,
+		ShieldItem,
     
     /** Life shape */
 		Life
@@ -134,6 +136,9 @@ public final class DrawManager {
 			spriteMap.put(SpriteType.Shield, new boolean[13][1]);
 			spriteMap.put(SpriteType.Life, new boolean[13][13]);
 			spriteMap.put(SpriteType.EnemyShipdangerous, new boolean[16][7]);
+			spriteMap.put(SpriteType.ExtraLife, new boolean[13][13]);
+			spriteMap.put(SpriteType.ShieldItem, new boolean[9][9]);
+			
 
 			fileManager.readship();//read ship파일
 			fileManager.loadSprite(spriteMap);
