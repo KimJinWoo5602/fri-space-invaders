@@ -1,5 +1,6 @@
 package engine;
 
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -79,6 +80,8 @@ public final class Core {
 	private static Screen currentScreen;
 	/** Difficulty settings list. */
 	private static List<GameSettings> gameSettings;
+	/** Key settings data of GameScreen */
+	private static GameKeySettings gameKeySettings = new GameKeySettings(KeyEvent.VK_A, KeyEvent.VK_D, KeyEvent.VK_SPACE);
 	/** Application logger. */
 	private static final Logger LOGGER = Logger.getLogger(Core.class
 			.getSimpleName());
@@ -153,7 +156,7 @@ public final class Core {
 								% EXTRA_LIFE_FRECUENCY == 0
 								&& gameState.getLivesRemaining() < MAX_LIVES;
 						currentScreen = new GameScreen(gameState,
-								gameSettings.get(gameState.getLevel() - 1),
+								gameSettings.get(gameState.getLevel() - 1), gameKeySettings,
 								bonusLife, width, height, FPS);
 						LOGGER.info("Starting " + WIDTH + "x" + HEIGHT
 								+ " game screen at " + FPS + " fps.");
@@ -334,6 +337,10 @@ public final class Core {
 
 	}
 
+
+	public static GameKeySettings getGameKeySettings() {
+		return gameKeySettings;
+	}
 	/**
 	 * Controls access to the logger.
 	 *
