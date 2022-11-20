@@ -61,8 +61,16 @@ public class Item extends Entity {
      * Sets correct sprite for the item, based on for player to Obtained item.
      */
     public void setSprite () {
-        if (!this.isget)
-            this.spriteType = DrawManager.SpriteType.ItemDrop;
+        if (!this.isget) {
+        	if (this.itemtype == ItemType.ExtraLifeItem) {
+        		this.spriteType = DrawManager.SpriteType.ExtraLife;
+        	}
+        	else if (this.itemtype == ItemType.ShieldItem) {
+        		this.spriteType = DrawManager.SpriteType.ShieldItem;
+        	}
+        	else
+        		this.spriteType = DrawManager.SpriteType.ItemDrop;
+        }
         else
             this.spriteType = DrawManager.SpriteType.ItemGet;
     }
