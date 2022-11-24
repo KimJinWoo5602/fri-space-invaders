@@ -105,8 +105,6 @@ public class GameScreen extends Screen {
 
 	private Set<Item> itemiterator;
 
-	private Shield shield;
-
 	private int past_countdown=4;
 
 	/**
@@ -229,75 +227,19 @@ public class GameScreen extends Screen {
 		super.update();
 
 		if (this.inputDelay.checkFinished() && !this.levelFinished) {
-
 			if (!this.ship.isDestroyed()) {
 				boolean moveRight = inputManager.isKeyDown(gameKeySettings.getRightMovingKey());
 				boolean moveLeft = inputManager.isKeyDown(gameKeySettings.getLeftMovingKey());
 
-				boolean isRightBorder = this.ship.getPositionX()
-						+ this.ship.getWidth() + this.ship.getSpeed() > this.width - 1;
-				boolean isLeftBorder = this.ship.getPositionX()
-						- this.ship.getSpeed() < 1;
-
-				if (moveRight && !isRightBorder) {
-					this.ship.moveRight();
-					if (shield != null)
-						shield.moveRight();
-				}
-				if (moveLeft && !isLeftBorder) {
-					this.ship.moveLeft();
-					if (shield != null)
-						shield.moveLeft();
-				}
+				if (moveRight) this.ship.moveRight(this.width - 1);
+				if (moveLeft) this.ship.moveLeft(1);
 				if (inputManager.isKeyDown(gameKeySettings.getShootingKey()))
 					if (this.ship.shoot(this.bullets))
 						this.bulletsShot++;
 			}
 
-			if (this.enemyShipSpecial != null) {
-				if (!this.enemyShipSpecial.isDestroyed())
-					this.enemyShipSpecial.move(2, 0);
-				else if (this.enemyShipSpecialExplosionCooldown.checkFinished())
-					this.enemyShipSpecial = null;
-
-			}
-			if (this.enemyShipSpecial == null
-					&& this.enemyShipSpecialCooldown.checkFinished()) {
-				this.enemyShipSpecial = new EnemyShip();
-				this.enemyShipSpecialCooldown.reset();
-				this.logger.info("A special ship appears");
-			}
-			if (this.enemyShipSpecial != null
-					&& this.enemyShipSpecial.getPositionX() > this.width) {
-				this.enemyShipSpecial = null;
-				this.logger.info("The special ship has escaped");
-			}
-
-			/** add dangerousShip */
-			if (this.enemyShipDangerous != null) {
-				if (!this.enemyShipDangerous.isDestroyed())
-					this.enemyShipDangerous.move(1, 0);
-				else if (this.enemyShipSpecialExplosionCooldown.checkFinished())
-					this.enemyShipDangerous = null;
-
-			}
-			if (this.enemyShipDangerous == null
-					&& this.enemyShipdangerousCooldown.checkFinished()) {
-				this.enemyShipDangerous = new EnemyShip(Color.BLUE);
-				this.enemyShipdangerousCooldown.reset();
-				this.logger.info("A dangerous ship appears");
-			}
-			if (this.enemyShipDangerous != null
-					&& this.enemyShipDangerous.getPositionX() > this.width) {
-				this.lives--;
-				this.enemyShipDangerous = null;
-				this.logger.info("The dangerous ship has escaped and you has lost lives");
-			}
-
+			update_enemyShip();
 			this.ship.update();
-			this.enemyShipFormation.update();
-			this.enemyShipFormation.shoot(this.bullets);
-
 		}
 		for (Item item : this.itemiterator) {
 			if (item != null) {
@@ -323,10 +265,56 @@ public class GameScreen extends Screen {
 		}
 	}
 
+	private void update_enemyShip() {
+		if (this.enemyShipSpecial != null) {
+			if (!this.enemyShipSpecial.isDestroyed())
+				this.enemyShipSpecial.move(2, 0);
+			else if (this.enemyShipSpecialExplosionCooldown.checkFinished())
+				this.enemyShipSpecial = null;
+
+		}
+		if (this.enemyShipSpecial == null
+				&& this.enemyShipSpecialCooldown.checkFinished()) {
+			this.enemyShipSpecial = new EnemyShip();
+			this.enemyShipSpecialCooldown.reset();
+			this.logger.info("A special ship appears");
+		}
+		if (this.enemyShipSpecial != null
+				&& this.enemyShipSpecial.getPositionX() > this.width) {
+			this.enemyShipSpecial = null;
+			this.logger.info("The special ship has escaped");
+		}
+
+		/** add dangerousShip */
+		if (this.enemyShipDangerous != null) {
+			if (!this.enemyShipDangerous.isDestroyed())
+				this.enemyShipDangerous.move(1, 0);
+			else if (this.enemyShipSpecialExplosionCooldown.checkFinished())
+				this.enemyShipDangerous = null;
+
+		}
+		if (this.enemyShipDangerous == null
+				&& this.enemyShipdangerousCooldown.checkFinished()) {
+			this.enemyShipDangerous = new EnemyShip(Color.BLUE);
+			this.enemyShipdangerousCooldown.reset();
+			this.logger.info("A dangerous ship appears");
+		}
+		if (this.enemyShipDangerous != null
+				&& this.enemyShipDangerous.getPositionX() > this.width) {
+			this.lives--;
+			this.enemyShipDangerous = null;
+			this.logger.info("The dangerous ship has escaped and you has lost lives");
+		}
+		this.enemyShipFormation.update();
+		this.enemyShipFormation.shoot(this.bullets);
+	}
+
 	/**
 	 * Draws the elements associated with the screen.
 	 */
 	private void draw() {
+		Shield shield = ship.get_shield();
+
 		drawManager.initDrawingNoAD(this);
 		for(Item item : this.itemiterator) {
 			if (item != null) {
@@ -345,11 +333,12 @@ public class GameScreen extends Screen {
 			drawManager.drawEntity(this.enemyShipDangerous,
 					this.enemyShipDangerous.getPositionX(),
 					this.enemyShipDangerous.getPositionY());
+
 		if (shield != null) {
 			drawManager.drawEntity(shield, shield.getPositionX(), shield.getPositionY());
 		}
 
-		if (itempool.getItem() != null && this.shield != null &&
+		if (itempool.getItem() != null && shield != null &&
 				itempool.getItem().getItemType() == Item.ItemType.ShieldItem) {
 			drawManager.drawEntity(shield, shield.getPositionX(),
 					shield.getPositionY());
@@ -423,7 +412,7 @@ public class GameScreen extends Screen {
 					recyclable.add(bullet);
 
 
-					if (shield == null && !this.ship.isDestroyed()) {
+					if (ship.get_shield() == null && !this.ship.isDestroyed()) {
 						SoundPlay.getInstance().play(SoundType.hit);
 						this.ship.destroy();
 						this.lives--;
@@ -432,7 +421,7 @@ public class GameScreen extends Screen {
 							this.clearItem();
 
 					} else if (!this.ship.isDestroyed()) {
-						shield = null;
+						ship.clear_shield();
 					}
 				}
 			} else {
@@ -561,7 +550,7 @@ public class GameScreen extends Screen {
 				this.clearItem();//효과 초기화
 				this.clearPointUp();
 				this.itemInfoCooldown.reset();
-				shield = new Shield(this.ship.getPositionX(), this.ship.getPositionY() - 3, this.ship);
+				this.ship.add_shield(new Shield(this.ship.getPositionX(), this.ship.getPositionY() - 3, this.ship));
 			}
 			else if (item.getIsget() == false &&
 					itempool.getItem().getItemType() == Item.ItemType.SpeedUpItem) {
@@ -597,7 +586,6 @@ public class GameScreen extends Screen {
 	 */
 	public void clearItem(){
 		ship.setInitState();
-		shield = null;
 	}
 	/**
 	 * Removing item that already obtained, or already get out of the gamescreen.

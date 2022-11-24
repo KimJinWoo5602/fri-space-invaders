@@ -32,7 +32,7 @@ public class Ship extends Entity {
 	/** Time spent inactive between hits. */
 	private Cooldown destructionCooldown;
 
-//	private Shield shield;
+	private Shield shield;
 
 	/**
 	 * Constructor, establishes the ship's properties.
@@ -51,6 +51,7 @@ public class Ship extends Entity {
 		this.spriteType = SpriteType.Ship;
 		this.shootingCooldown = Core.getCooldown(SHOOTING_INTERVAL);
 		this.destructionCooldown = Core.getCooldown(1000);
+		this.shield = null;
 	}
 	public Ship(final int positionX, final int positionY, int shipShape, Color shipColor) {
         super(positionX, positionY, 13 * 2, 8 * 2, shipColor);
@@ -61,6 +62,7 @@ public class Ship extends Entity {
 		this.spriteType = SpriteType.Ship;
 		this.shootingCooldown = Core.getCooldown(SHOOTING_INTERVAL);
 		this.destructionCooldown = Core.getCooldown(1000);
+		this.shield = null;
     }
 	public Ship(final int positionX, final int positionY, char shipShape, Color shipColor) {
 		super(positionX, positionY, 13 * 2, 8 * 2, shipColor);
@@ -71,6 +73,7 @@ public class Ship extends Entity {
 		this.spriteType = SpriteType.Ship;
 		this.shootingCooldown = Core.getCooldown(SHOOTING_INTERVAL);
 		this.destructionCooldown = Core.getCooldown(1000);
+		this.shield = null;
 	}
 
 
@@ -81,20 +84,28 @@ public class Ship extends Entity {
 	 * Moves the ship speed uni ts right, or until the right screen border is
 	 * reached.
 	 */
-	public final void moveRight()
+	public final void moveRight(int borderX)
 	{
-		this.positionX += SPEED;
-//		shield.moveRight();
+		boolean isRightBorder = this.getPositionX()
+				+ this.getWidth() + this.getSpeed() > borderX;
+		if (!isRightBorder) {
+			this.positionX += SPEED;
+			if (shield != null) shield.moveRight();
+		}
 	}
 
 	/**
 	 * Moves the ship speed units left, or until the left screen border is
 	 * reached.
 	 */
-	public final void moveLeft()
+	public final void moveLeft(int borderX)
 	{
-		this.positionX -= SPEED;
-//		shield.moveRight();
+		boolean isLeftBorder = this.getPositionX()
+				- this.getSpeed() < borderX;
+		if (!isLeftBorder) {
+			this.positionX -= SPEED;
+			if (shield != null) shield.moveLeft();
+		}
 	}
 
 	/**
@@ -114,7 +125,11 @@ public class Ship extends Entity {
 		}
 		return false;
 	}
-
+	public final void add_shield(Shield shield) {
+		this.shield = shield;
+	}
+	public final void clear_shield() { shield = null; }
+	public final Shield get_shield() { return shield; }
 	/**
 	 * Updates status of the ship.
 	 */
@@ -160,6 +175,7 @@ public class Ship extends Entity {
 
 	public void setInitState(){
 		SPEED = INIT_SPEED;
+		shield = null;
 		this.shootingCooldown = engine.Core.getCooldown(INIT_SHOOTING_INTERVAL);
 		BULLET_SPEED = INIT_BULLET_SPEED;
 	}
