@@ -56,6 +56,8 @@ public class GameScreen extends Screen {
 	/** Current game difficulty settings. */
 	private GameSettings gameSettings;
 	/** Current difficulty level number. */
+	private GameKeySettings gameKeySettings;
+	/** Current key settings of control ship */
 	private int level;
 	/** Formation of enemy ships. */
 	private EnemyShipFormation enemyShipFormation;
@@ -124,11 +126,12 @@ public class GameScreen extends Screen {
 	 *                     Frames per second, frame rate at which the game is run.
 	 */
 	public GameScreen(final GameState gameState,
-			final GameSettings gameSettings, final boolean bonusLife,
+			final GameSettings gameSettings, final GameKeySettings gameKeySettings, final boolean bonusLife,
 			final int width, final int height, final int fps) {
 		super(width, height, fps);
 
 		this.gameSettings = gameSettings;
+		this.gameKeySettings = gameKeySettings;
 		this.bonusLife = bonusLife;
 		this.level = gameState.getLevel();
 		this.score = gameState.getScore();
@@ -228,10 +231,8 @@ public class GameScreen extends Screen {
 		if (this.inputDelay.checkFinished() && !this.levelFinished) {
 
 			if (!this.ship.isDestroyed()) {
-				boolean moveRight = inputManager.isKeyDown(KeyEvent.VK_RIGHT)
-						|| inputManager.isKeyDown(KeyEvent.VK_D);
-				boolean moveLeft = inputManager.isKeyDown(KeyEvent.VK_LEFT)
-						|| inputManager.isKeyDown(KeyEvent.VK_A);
+				boolean moveRight = inputManager.isKeyDown(gameKeySettings.getRightMovingKey());
+				boolean moveLeft = inputManager.isKeyDown(gameKeySettings.getLeftMovingKey());
 
 				boolean isRightBorder = this.ship.getPositionX()
 						+ this.ship.getWidth() + this.ship.getSpeed() > this.width - 1;
@@ -248,7 +249,7 @@ public class GameScreen extends Screen {
 					if (shield != null)
 						shield.moveLeft();
 				}
-				if (inputManager.isKeyDown(KeyEvent.VK_SPACE))
+				if (inputManager.isKeyDown(gameKeySettings.getShootingKey()))
 					if (this.ship.shoot(this.bullets))
 						this.bulletsShot++;
 			}
