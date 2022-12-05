@@ -2,7 +2,9 @@ package engine;
 
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.net.URLDecoder;
 
 import java.util.List;
 import java.util.logging.ConsoleHandler;
@@ -337,11 +339,11 @@ public final class Core {
 				break;
 				
 			case 9: //reset
-	            File file = new File("save");
-	            file.delete();
+				getFileManager().deletefile();
 				returnCode = frame.setScreen(currentScreen);
+				LOGGER.info("Delete the 'save' file");
 				break;
-				
+
 			case 10: //GameKeySetting
 				currentScreen = new GameKeyScreen(width, height, FPS);
 				LOGGER.info("Starting " + WIDTH + "x" + HEIGHT

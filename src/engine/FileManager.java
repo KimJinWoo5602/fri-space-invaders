@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import engine.DrawManager.SpriteType;
 import engine.DrawManager;
 
+
 /**
  * Manages files used in the application.
  * 
@@ -424,6 +425,18 @@ public final class FileManager {
 			save.write(state);
 
 			save.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public void deletefile() {
+		try {
+			String jarPath = FileManager.class.getProtectionDomain()
+					.getCodeSource().getLocation().getPath();
+			jarPath = URLDecoder.decode(jarPath, "UTF-8");
+			File file = new File(jarPath + "../save");
+			file.delete();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
